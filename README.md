@@ -9,7 +9,7 @@ ssh-agent in a container.
 This container declares a volume that hosts the agent's socket so that other invocations of the `ssh` client can interact with it.
 
 ```console
-docker run -d --name=ssh-agent whilp/ssh-agent:latest
+docker run -d --name=ssh-agent amazeeio/ssh-agent:latest
 ```
 
 ### 2. Add your ssh keys
@@ -17,7 +17,7 @@ docker run -d --name=ssh-agent whilp/ssh-agent:latest
 Run a temporary container which has access to both the volumes from the long-lived `ssh-agent` container as well as a volume mounted from your host that includes your SSH keys. This container will only be used to load the keys into the long-lived `ssh-agent` container. Run the following command once for each key you wish to make available through the `ssh-agent`:
 
 ```console
-docker run --rm --volumes-from=ssh-agent -v ~/.ssh:/ssh -it whilp/ssh-agent:latest ssh-add /ssh/<host_key_file_name>
+docker run --rm --volumes-from=ssh-agent -v ~/.ssh:/ssh -it amazeeio/ssh-agent:latest ssh-add /ssh/<host_key_file_name>
 ```
 
 ### 3. (optional) Add known_hosts
@@ -25,7 +25,7 @@ docker run --rm --volumes-from=ssh-agent -v ~/.ssh:/ssh -it whilp/ssh-agent:late
 `Host key verification failed` is common if `known_hosts` are not setup.  Hosts such as `github.com` or `bitbucket.org` will require host key validation.  Follow this step to copy any `known_hosts` from your `host` to the `ssh-agent`. 
 
 ```console
-docker run --rm --volumes-from=ssh-agent -v ~/.ssh:/ssh -it whilp/ssh-agent:latest cp /ssh/known_hosts /root/.ssh/known_hosts
+docker run --rm --volumes-from=ssh-agent -v ~/.ssh:/ssh -it amazeeio/ssh-agent:latest cp /ssh/known_hosts /root/.ssh/known_hosts
 ```
 
 ### 4. Access via other containers
